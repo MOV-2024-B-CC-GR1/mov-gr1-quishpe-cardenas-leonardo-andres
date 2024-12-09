@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "nombre": "Chevrolet_Sail",
+        "fechaFabricacion": "2015-02-03",
+        "esElectrico": false,
+        "precio": 15203.0
+    },
+    {
+        "id": 2,
+        "nombre": "Chevrolet_Camaro",
+        "fechaFabricacion": "2018-06-15",
+        "esElectrico": false,
+        "precio": 53.263
+    },
+    {
+        "id": 3,
+        "nombre": "Tesla_Model_S",
+        "fechaFabricacion": "2021-02-06",
+        "esElectrico": true,
+        "precio": 98025.0
+    }
+]
