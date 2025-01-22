@@ -17,7 +17,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("MainKt") // Configura tu clase principal
+    mainClass.set("MainK\t") // Configura tu clase principal
 }
 
 tasks.test {
