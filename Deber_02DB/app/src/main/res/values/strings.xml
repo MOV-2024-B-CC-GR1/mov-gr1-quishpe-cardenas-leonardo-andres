@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">deber_02db</string>
+    <string name="nuevo_auto">Nuevo Auto</string>
+    <string name="modelo">Modelo</string>
+    <string name="marca">Marca</string>
+    <string name="precio">Precio</string>
+    <string name="fecha_de_fabricaci_n_yyyy_mm_dd">Fecha de fabricación</string>
+    <string name="guardar_auto">Guardar Auto</string>
+    <string name="agregar_parte">Agregar Parte</string>
+    <string name="mis_partes">Mis Partes</string>
+    <string name="nueva_parte">Nueva Parte</string>
+    <string name="guardar_parte">Guardar Parte</string>
+    <string name="fecha_de_reemplazo_yyyy_mm_dd">Fecha de Reemplazo</string>
+    <string name="nombre_de_la_parte">Nombre de la Parte</string>
+    <string name="todo">TODO</string>
+    <string name="abrir_mapa">Abrir Mapa</string>
+    <string name="latitud_longitud">Latitud: , Longitud:</string>
+    <string name="imagen_del_auto">Imagen del auto</string>
+    <string name="a_o">Año</string>
+    <string name="marca_del_auto">Marca del auto</string>
+    <string name="nombre_del_auto">Nombre del auto</string>
+</resources>
