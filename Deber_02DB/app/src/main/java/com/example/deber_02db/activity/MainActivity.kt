@@ -6,10 +6,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.example.deber_02db.R
-import com.example.deber_02db.activity.AutoFormActivity
-import com.example.deber_02db.activity.AutoListActivity
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnVerAutos: Button

@@ -14,6 +14,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.text.SimpleDateFormat
@@ -114,18 +115,33 @@ class AutoFormActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
 
-        // Establecer la ubicación inicial en el mapa
-        val ubicacionInicial = LatLng(-0.2096357, -78.4882838)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionInicial, 20f))
+        // Verificar si hay coordenadas guardadas
+        if (selectedLat != 0.0 && selectedLng != 0.0) {
+            val ubicacionGuardada = LatLng(selectedLat, selectedLng)
+            googleMap.clear()
+            googleMap.addMarker(
+                MarkerOptions()
+                    .position(ubicacionGuardada)
+                    .title("Ubicación guardada")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)) // Marcador rojo
+            )
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionGuardada, 16f))
+        } else {
+            // Ubicación inicial por defecto
+            val ubicacionInicial = LatLng(-0.2096357, -78.4882838)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacionInicial, 20f))
+        }
 
-        // Acción cuando el usuario selecciona una ubicación en el mapa
+        // Listener para clics en el mapa
         googleMap.setOnMapClickListener { latLng ->
-            googleMap.clear() // Limpiar el mapa de marcadores anteriores
-            googleMap.addMarker(MarkerOptions().position(latLng).title("Ubicación seleccionada"))
+            googleMap.clear()
+            googleMap.addMarker(
+                MarkerOptions()
+                    .position(latLng)
+                    .title("Ubicación seleccionada")
+            )
             selectedLat = latLng.latitude
             selectedLng = latLng.longitude
-
-            // Actualizar las coordenadas en la interfaz
             tvCoordenadas.text = "Latitud: $selectedLat, Longitud: $selectedLng"
         }
     }
@@ -137,31 +153,33 @@ class AutoFormActivity : AppCompatActivity(), OnMapReadyCallback {
             return
         }
         val ubicacion = LatLng(lat, lng)
-
-        // Asegúrate de no borrar el mapa entero, solo agrega o actualiza el marcador
-        googleMap.addMarker(MarkerOptions().position(ubicacion).title("Ubicación guardada"))
-
-        // Mueve la cámara al marcador y haz un zoom en la ubicación
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 16f))
+        googleMap.clear() // Limpiar marcadores anteriores
+        googleMap.addMarker(
+            MarkerOptions()
+                .position(ubicacion)
+                .title("Ubicación guardada")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)) // Marcador rojo
+        )
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ubicacion, 16f)) // Ajustar zoom
     }
 
     // Cargar los datos de un auto existente en los campos de la interfaz
     private fun cargarAuto(autoId: Int) {
-        val auto = autoRepository.obtenerPorId(autoId) ?: return run {
+        val auto = autoRepository.obtenerPorId(autoId) ?: run {
             Toast.makeText(this, "Error: Auto no encontrado", Toast.LENGTH_SHORT).show()
             finish()
+            return
         }
 
-        // Asignar los valores del auto a los campos de la interfaz
         etNombre.setText(auto.nombre)
         etMarca.setText(auto.marca)
         etPrecio.setText(auto.precio.toString())
         etFechaFabricacion.setText(dateFormat.format(auto.fechaFabricacion))
-        selectedLat = auto.latitud ?: 0.0  // Si es null, asigna 0.0
+        selectedLat = auto.latitud ?: 0.0
         selectedLng = auto.longitud ?: 0.0
         tvCoordenadas.text = "Latitud: $selectedLat, Longitud: $selectedLng"
 
-        // Si el mapa está inicializado, actualizamos la ubicación en el mapa
+        // Actualizar el mapa si está listo
         if (::googleMap.isInitialized) {
             actualizarUbicacionEnMapa(selectedLat, selectedLng)
         }
