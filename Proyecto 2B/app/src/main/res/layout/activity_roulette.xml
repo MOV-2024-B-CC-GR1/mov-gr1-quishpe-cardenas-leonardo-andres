@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+        <com.example.proyecto_ruleta.RouletteWheelView
+            android:id="@+id/rouletteWheel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/ivPointer"
+            android:layout_width="100dp"
+            android:layout_height="99dp"
+            android:layout_marginTop="80dp"
+            android:contentDescription="imagen"
+            android:gravity="center"
+            android:rotation="0"
+            android:src="@drawable/pointer" />
+
+        <Button
+            android:id="@+id/btnSpin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="Girar" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
