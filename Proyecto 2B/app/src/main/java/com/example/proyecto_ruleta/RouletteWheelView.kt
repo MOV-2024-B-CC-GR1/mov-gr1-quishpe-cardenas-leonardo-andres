@@ -6,10 +6,12 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import android.view.animation.DecelerateInterpolator
+import android.view.animation.AccelerateDecelerateInterpolator
 import kotlin.math.min
+import kotlin.random.Random
 
 class RouletteWheelView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -17,7 +19,7 @@ class RouletteWheelView(context: Context, attrs: AttributeSet) : View(context, a
     private var sweepAngles = mutableListOf<Float>()
     private var rotationAngle = 0f
 
-    fun setupWheelOptions(newOptions: List<String>) { // 👈 Nombre único
+    fun setupWheelOptions(newOptions: List<String>) { //
         this.options = newOptions.toMutableList()
         calculateAngles()
         invalidate()
@@ -56,40 +58,73 @@ class RouletteWheelView(context: Context, attrs: AttributeSet) : View(context, a
         }
     }
 
-    private fun drawTextOnArc(canvas: Canvas, text: String, cx: Float, cy: Float, radius: Float, startAngle: Float, sweepAngle: Float) {
-        val path = Path()
-        path.addArc(
-            cx - radius,
-            cy - radius,
-            cx + radius,
-            cy + radius,
-            startAngle,
-            sweepAngle
-        )
-
+    private fun drawTextOnArc(
+        canvas: Canvas,
+        text: String,
+        cx: Float,
+        cy: Float,
+        radius: Float,
+        startAngle: Float,
+        sweepAngle: Float
+    ) {
         val textPaint = Paint().apply {
             color = Color.WHITE
-            textSize = 24f
+            textSize = radius * 0.12f  // Tamaño base ajustado
             textAlign = Paint.Align.CENTER
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
         }
 
-        canvas.drawTextOnPath(text, path, radius * 0.5f, radius * 0.5f, textPaint)
+        // Ajuste dinámico de tamaño de texto
+        val maxTextWidth = (2 * Math.PI * radius * (sweepAngle / 360)).toFloat() * 0.7f
+        var textSize = textPaint.textSize
+        while (textPaint.measureText(text) > maxTextWidth && textSize > 12f) {
+            textSize *= 0.9f
+            textPaint.textSize = textSize
+        }
+
+        val path = Path().apply {
+            addArc(
+                cx - radius,
+                cy - radius,
+                cx + radius,
+                cy + radius,
+                startAngle + 2f,  // Offset para centrado visual
+                sweepAngle - 4f    // Margen para bordes
+            )
+        }
+
+        // Centrado vertical preciso
+        val metrics = textPaint.fontMetrics
+        val verticalOffset = -(metrics.ascent + metrics.descent) / 2
+
+        canvas.drawTextOnPath(
+            text.uppercase(),  // Texto en mayúsculas para mejor legibilidad
+            path,
+            0f,
+            verticalOffset,
+            textPaint
+        )
     }
 
-    fun rotateWheel(targetAngle: Float, duration: Long = 3000) {
-        val animator = ValueAnimator.ofFloat(0f, targetAngle)
-        animator.duration = duration
-        animator.interpolator = DecelerateInterpolator()
-        animator.addUpdateListener {
-            rotationAngle = it.animatedValue as Float
-            invalidate()
+    fun rotateWheel(targetRotations: Float = 5F, duration: Long = 4000) {
+        val random = Random
+        val baseAngle = 360f * targetRotations
+        val finalAngle = baseAngle + random.nextFloat() * 360
+
+        val animator = ValueAnimator.ofFloat(0f, finalAngle).apply {
+            this.duration = duration
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener {
+                rotationAngle = it.animatedValue as Float
+                invalidate()
+            }
         }
         animator.start()
     }
 
     private fun getColorForIndex(index: Int): Int {
         val colors = listOf(
-            Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA
+            Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA, Color.CYAN, Color.GRAY, Color.DKGRAY, Color.LTGRAY
         )
         return colors[index % colors.size]
     }

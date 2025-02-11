@@ -31,7 +31,7 @@ class RouletteActivity : AppCompatActivity() {
     private fun spinRoulette() {
         isSpinning = true
         val random = Random
-        val extraRotations = 5
+        val extraRotations = 10
         val targetAngle = 360 * extraRotations + random.nextFloat() * 360
 
         rouletteWheel.rotateWheel(targetAngle, 5000)
@@ -44,9 +44,16 @@ class RouletteActivity : AppCompatActivity() {
     }
 
     private fun calculateSelectedIndex(targetAngle: Float): Int {
-        val normalizedAngle = targetAngle % 360
-        val sectionAngle = 360f / rouletteWheel.options.size
-        return (normalizedAngle / sectionAngle).toInt()
+        val totalSections = rouletteWheel.options.size
+        val normalizedAngle = (targetAngle % 360 + 360) % 360  // Ángulo entre 0-360
+        val sectionSize = 360f / totalSections
+
+        // Cálculo preciso considerando posición del pointer
+        val effectiveAngle = (normalizedAngle + 270) % 360  // Ajuste para posición vertical superior
+        var calculatedIndex = (effectiveAngle / sectionSize).toInt()
+
+        // Asegurar índice dentro de los límites
+        return (totalSections - calculatedIndex) % totalSections
     }
 
     private fun showResult(index: Int) {
