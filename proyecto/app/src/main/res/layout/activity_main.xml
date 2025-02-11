@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -18,7 +18,7 @@
             android:id="@+id/ruletaView"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:background="@drawable/ruleta" />
+            android:background="@android:drawable/btn_star_big_on" />
 
         <Button
             android:id="@+id/btnGirar"
@@ -35,4 +35,4 @@
             android:text="Resultado: "
             android:textSize="18sp" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
